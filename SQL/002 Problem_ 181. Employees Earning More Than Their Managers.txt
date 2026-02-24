@@ -1,0 +1,9 @@
+-- Problem: 181. Employees Earning More Than Their Managers
+-- Goal: Find employees whose salary is greater than their manager's salary.
+
+SELECT 
+    E.name AS Employee   -- Employee name who earns more than their manager
+FROM Employee E
+JOIN Employee M
+    ON E.managerId = M.id   -- Self join: match employee's managerId with manager's id
+WHERE E.salary > M.salary;  -- Condition: employee salary greater than manager salary
