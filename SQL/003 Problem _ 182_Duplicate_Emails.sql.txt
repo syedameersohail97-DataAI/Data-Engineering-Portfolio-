@@ -1,0 +1,52 @@
+182_Duplicate_Emails.sql
+
+
+-- ❌ Attempt 1 (Wrong Approach)
+-- Used DISTINCT thinking it finds duplicates
+-- Mistake: DISTINCT removes duplicates instead of finding repeated values
+
+SELECT DISTINCT email
+FROM Person;
+
+
+-- ❌ Attempt 2 (Wrong Approach)
+-- Used COUNT in WHERE clause
+-- Mistake: Aggregate functions cannot be used in WHERE
+-- SQL execution order: WHERE runs before GROUP BY
+
+SELECT email
+FROM Person
+WHERE COUNT(email) > 1; 
+
+
+-- ✅ Final Correct Solution
+
+/*🔁 Approach 2 – Subquery Method (Alternative)
+Concept: Subquery with IN clause
+Sql
+*/
+
+SELECT DISTINCT email AS Email
+FROM Person
+WHERE email IN (
+    SELECT email
+    FROM Person
+    GROUP BY email
+    HAVING COUNT(email) > 1
+);
+SELECT email
+FROM Person
+GROUP BY email
+HAVING COUNT(email) > 1;
+
+/*
+✅ Approach 1 – Optimal Solution (Recommended)
+Concept: Aggregation using GROUP BY + HAVING
+Sql
+*/
+
+SELECT email AS Email
+FROM Person
+GROUP BY email
+HAVING COUNT(email) > 1;
+
