@@ -1,0 +1,88 @@
+-- ✅ Correct Solution
+
+SELECT c.name AS Customers
+FROM Customers c
+LEFT JOIN Orders o
+ON c.id = o.customerId
+WHERE o.customerId IS NULL;
+
+
+
+
+
+
+
+❌ My Initial (Wrong) Approach
+
+
+--Sql
+-- ❌ Incorrect Attempt
+
+SELECT Customers.name as Customers 
+FROM Customers
+Left Join Orders
+ON Customers.customerId = Orders.ID
+WHERE Customers.customerId NOT IN
+(
+SELECT Customers.name 
+FROM Customers, Orders
+WHERE Customers.customerId = Orders.ID
+);
+
+
+
+--🚨 Mistakes I Made
+
+--1️⃣ Wrong Join Columns
+--Sql
+
+--ON Customers.customerId = Orders.ID
+
+--✔ Correct should be:
+--Sql
+
+--Customers.id = Orders.customerId
+--Reason:
+--Customers.id → Primary Key
+--Orders.customerId → Foreign Key
+
+--2️⃣ Compared Wrong Columns in Subquery
+--Sql
+
+--SELECT Customers.name
+--But we should compare IDs, not names.
+
+
+--3️⃣ Logic Issue with NOT IN
+--If NULL exists in subquery → NOT IN may fail.
+
+--✅ Final Correct Solution (Recommended)
+--Sql
+
+-- ✅ Correct Solution
+
+SELECT c.name AS Customers
+FROM Customers c
+LEFT JOIN Orders o
+ON c.id = o.customerId
+WHERE o.customerId IS NULL;
+
+/*
+🧠 Why This Works?
+LEFT JOIN keeps all customers.
+If no matching order exists → order columns become NULL.
+WHERE o.customerId IS NULL filters customers who never ordered.
+*/
+
+--🔥 Alternative Solution
+--Sql
+
+/*
+SELECT name AS Customers
+FROM Customers
+WHERE id NOT IN (
+    SELECT customerId FROM Orders
+);
+*/
+
+--⚠ Works, but less safe if NULL exists.
